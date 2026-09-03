@@ -16,3 +16,9 @@
 10. 核心 RAG Pipeline 显式实现；不得由黑盒框架决定关键检索、Context 或 Grounding 语义。
 11. 公共 Delivery 不直接读写核心数据库表，不直接调用 iPhone。
 12. 数据库、模型和 Tunnel 的具体地址是 Infrastructure 配置，不进入 Domain Model。
+
+13. API 业务代码以三个 Bounded Context 为 ownership 边界；Capability 不能成为无 owner 的根级业务模块。
+14. Context 间只能通过公开 Contract/Event/Port 协作，不得深层 import 对方内部实现或跨 ownership 写表。
+15. `site-api-contract` 只承载 wire protocol，不得演变为 Domain/shared/common 垃圾桶。
+16. PostgreSQL schema 与数据库资产按 `knowledge/answering/quality/system` ownership 对齐。
+17. 仓库目录允许在真实实现证据下演进，但 material ownership 变化必须先修 Spec。

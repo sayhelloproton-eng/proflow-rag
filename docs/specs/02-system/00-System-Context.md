@@ -36,3 +36,8 @@ Mac RAG 服务是控制平面和 RAG 编排中心；PostgreSQL 是持久状态�
 - `SYS-004`：离线 rebuild 不得阻塞/破坏当前 Active Snapshot。
 - `SYS-005`：手机在线请求优先于离线 Embedding 批处理。
 - `SYS-006`：Site/CLI/MCP 等 Delivery Adapter 不拥有核心领域规则。
+- `SYS-007`：两个可部署单元固定为 `apps/api` 与 `apps/site`，同属一个产品仓库。
+- `SYS-008`：API 运行时代码以三个 Bounded Context 为一级业务 ownership，Capability 必须有明确 owner。
+- `SYS-009`：Infrastructure 只实现 Port/Adapter；跨 Context 不得深层 import 或跨 ownership 写表。
+- `SYS-010`：V0 唯一共享 package 为 `site-api-contract`，只共享 wire contract，不共享 Domain。
+- `SYS-011`：数据库 schema/资产按 `knowledge/answering/quality/system` ownership 对齐。

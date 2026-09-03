@@ -20,4 +20,4 @@ ProFlow RAG 使用独立 backend port、database `proflow_rag`、Dev Tunnel iden
 
 ## Development Gate
 
-在仓库目录 ownership 冻结前不创建正式应用骨架；骨架创建后先通过 build/typecheck/health smoke，再进入 Knowledge 实现。
+仓库目录 ownership 已冻结并完成空目录占位；下一步创建正式应用骨架时先通过 build/typecheck/health smoke，再进入 Knowledge Management 实现。

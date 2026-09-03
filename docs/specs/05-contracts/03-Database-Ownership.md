@@ -1,6 +1,6 @@
 # Contract｜Database Ownership
 
-状态：REVIEWED_V0_2026-09-03
+状态：FROZEN_V0_2026-09-03
 
 ## Physical Database
 
@@ -8,14 +8,14 @@ V0 使用单一 PostgreSQL database：`proflow_rag`，启用 pgvector，NestJS �
 
 ## Logical Ownership
 
-建议 PostgreSQL schema 体现 ownership：
+V0 PostgreSQL schema 必须体现 ownership：
 
 - `knowledge`：snapshot/document/chunk/index/build run。
 - `answering`：conversation/turn 及必要请求状态。
 - `quality`：trace/feedback/eval dataset/run/result。
 - `system`：migration/config bookkeeping。
 
-最终表名在数据库实现 Spec 冻结时确定。
+具体表名与索引仍在数据库实现阶段逐步确定，但 schema ownership 已冻结；调整表名不等于改变领域边界。
 
 ## Cross-context Rule
 

@@ -31,7 +31,7 @@ The core reading path is:
 → 08-decisions
 ```
 
-The current next gate is repository/module directory design. No NestJS application skeleton should be created before that ownership discussion is frozen.
+Repository/module ownership is now frozen. Placeholder directories are created first; implementation proceeds capability-by-capability under the owning bounded context. Material directory/ownership changes must amend the owning Spec before migration.
 
 ## Development Method
 

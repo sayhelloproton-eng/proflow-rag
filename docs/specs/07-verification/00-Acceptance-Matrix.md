@@ -29,6 +29,11 @@
 | SYS-004 Offline rebuild 不破坏 Active | VER-FAIL-001 |
 | SYS-005 在线推理优先 | VER-RUN-003 |
 | SYS-006 Delivery 不拥有核心规则 | VER-ARCH-001 |
+| SYS-007 `apps/api` + `apps/site` 两个部署单元同仓 | VER-ARCH-004 |
+| SYS-008 三个 Bounded Context 拥有 API 业务代码 | VER-ARCH-005 |
+| SYS-009 Port/Adapter 与跨 Context ownership 边界 | VER-ARCH-001 / VER-ARCH-005 |
+| SYS-010 唯一共享 package 仅承载 wire contract | VER-ARCH-006 |
+| SYS-011 DB schema/资产与 Context ownership 对齐 | VER-ARCH-007 |
 
 ## 3. Knowledge Management Invariants
 

@@ -49,3 +49,19 @@ Feedback 只改变质量数据，不自动修改 expected answer、模型参数�
 ## VER-QE-002 Regression Promotion
 
 把真实 👎 转成 EvalCase 前要求显式复核 expected Evidence/behavior，并记录 provenance。
+
+## VER-ARCH-004 Deployable Layout
+
+检查 Git tree：产品源码的两个部署单元只能是 `apps/api` 与 `apps/site`；二者同仓版本化。占位阶段不得出现未经 Spec 的第三个 `apps/*`。
+
+## VER-ARCH-005 Context & Capability Ownership
+
+静态依赖检查证明 API 业务能力归属 `knowledge-management`、`grounded-answering`、`quality-evaluation` 三个 Context；不存在根级业务 `capabilities/` 逃逸 ownership。跨 Context 仅使用公开 Contract/Event，禁止深层 import。
+
+## VER-ARCH-006 Shared Package Boundary
+
+V0 检查 `packages/` 只存在 `site-api-contract`；其导出只属于 HTTP/SSE wire protocol 与公开 payload/error，不导出 Aggregate、Repository Entity、EvidenceSet、KnowledgeSnapshot 或 RagTrace 内部模型。
+
+## VER-ARCH-007 Database Ownership Layout
+
+检查 migration/schema SQL 与 repository：数据库逻辑 schema/资产按 `knowledge`、`answering`、`quality`、`system` 划分；Context 不直接写对方 ownership schema。
