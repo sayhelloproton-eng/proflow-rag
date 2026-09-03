@@ -33,6 +33,10 @@ The core reading path is:
 
 Repository/module ownership is now frozen. Placeholder directories are created first; implementation proceeds capability-by-capability under the owning bounded context. Material directory/ownership changes must amend the owning Spec before migration.
 
+## Project Continuity
+
+Cross-chat execution context starts at `docs/context/README.md`. New Chat / Work / Agent sessions recover the project from the minimal long-term rules, `CURRENT.md`, and stage-specific `REQUIRED_CONTEXT`; full chat history is not a project authority.
+
 ## Development Method
 
 Spec changes precede material implementation changes. V0 is not TDD-driven, but unit/integration checks, smoke paths and RAG Eval remain mandatory evidence. A feature is not accepted because it merely runs; it must satisfy the owning Spec and Verification gate.
