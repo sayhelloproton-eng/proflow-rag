@@ -1,6 +1,6 @@
 # Site Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Purpose
 ChatGPT Sites is the public presentation layer for ProFlow and the primary ChatWeb entry for this project.
@@ -13,7 +13,7 @@ Browser code must not call the Dev Tunnel with a secret. Site server code reads 
 
 ## Chat UX
 - Streaming is mandatory and should begin as early as practical.
-- Sources appear after/alongside the completed answer and link to GitHub evidence.
+- Sources appear after/alongside the completed answer and link to immutable GitHub evidence at the indexed commit and source line range.
 - Anonymous usage; no login/account system in V0.
 - Conversation length warnings must be visible when the context budget is approached.
 

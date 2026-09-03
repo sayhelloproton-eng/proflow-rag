@@ -1,10 +1,10 @@
 # Implementation Plan
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## SDD Sequence
-1. Freeze Master, Architecture, Source Sync and Database specs.
-2. Create NestJS/Fastify modular-monolith skeleton and repository scripts.
+1. Audit and freeze the complete V0 spec set before application skeleton work.
+2. Discuss and freeze repository/module directory ownership, then create the NestJS/Fastify modular-monolith skeleton and repository scripts.
 3. Provision native PostgreSQL/pgvector and migrations.
 4. Implement repository snapshot acquisition and corpus filtering.
 5. Implement doc/code/test parsing and structure-aware chunking plus fixed-size baseline.

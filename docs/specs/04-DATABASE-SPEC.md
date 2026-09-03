@@ -1,6 +1,6 @@
 # Database Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Engine
 Use native PostgreSQL on the Mac with the pgvector extension. NestJS connects directly through `pg`; no ORM layer is allowed.

@@ -1,9 +1,9 @@
 # Security & Public Access Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Service Authentication
-ChatGPT Site server calls the backend with `Authorization: Bearer <PROFLOW_RAG_API_KEY>`. The same secret is stored in Site Secrets and the Mac `.env`; it is never shipped to browser JavaScript.
+ChatGPT Site server calls Site-facing backend APIs with `Authorization: Bearer <PROFLOW_RAG_API_KEY>`. The same secret is stored in Site Secrets and the Mac `.env`; it is never shipped to browser JavaScript. `/api/chat`, `/api/search` and other Site-server calls share this service-auth boundary.
 
 ## Public Surface
 - Public users are anonymous; no login/account system in V0.

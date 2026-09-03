@@ -1,6 +1,6 @@
 # Rerank Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Role
 Reranking is a required V0 learning and production stage between hybrid retrieval and context construction.

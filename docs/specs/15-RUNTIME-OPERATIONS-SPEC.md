@@ -1,6 +1,6 @@
 # Runtime Operations Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Development
 Use repository-owned scripts such as `pnpm dev`, database setup/migrate scripts and tunnel lifecycle scripts. Development does not introduce launchd.
@@ -19,4 +19,4 @@ After the project is stable, macOS `launchd` may call repository-owned start scr
 Use one stable Microsoft Dev Tunnel for this project, matching the database-style namespace isolation: one project, one owned resource. The public Site depends on its HTTPS endpoint.
 
 ## Health
-Runtime status must distinguish API, PostgreSQL, active snapshot, tunnel and model-service readiness.
+Internal runtime status must distinguish API, PostgreSQL, active snapshot, tunnel and model-service readiness. The public `/health` endpoint exposes only a minimal safe status; detailed dependency diagnostics remain internal.

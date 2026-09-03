@@ -1,6 +1,6 @@
 # Ingestion Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Pipeline
 `Repository Snapshot -> Filter -> Parse -> Chunk -> Embed -> Store -> Validate -> Activate`.

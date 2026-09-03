@@ -1,10 +1,10 @@
 # Retrieval Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Strategy
 V0 uses hybrid retrieval from the same PostgreSQL database:
-- lexical retrieval via PostgreSQL full-text search;
+- lexical retrieval via PostgreSQL-native text search; PostgreSQL FTS is the baseline, with PostgreSQL-native exact/trigram fallback allowed when CJK text or engineering identifiers are not recalled reliably;
 - semantic retrieval via pgvector similarity search.
 
 ## Fusion
@@ -21,4 +21,4 @@ V0 uses hybrid retrieval from the same PostgreSQL database:
 Retrieval produces ranked candidates plus branch ranks/scores and trace metadata for reranking and later audit.
 
 ## Acceptance
-Eval must include natural-language, exact-term, code-symbol, test-evidence and mixed-intent queries.
+Eval must include Chinese/English natural-language, exact-term, CLI/error-name, code-symbol/path, test-evidence and mixed-intent queries. The lexical branch is not considered complete until CJK text and exact engineering identifiers meet the benchmark without adding a second search service.

@@ -1,6 +1,6 @@
 # RAG Eval Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Purpose
 Eval is the primary quality gate for this SDD project. Unit-test coverage is not used as a proxy for RAG quality.
@@ -10,6 +10,7 @@ Eval is the primary quality gate for this SDD project. Unit-test coverage is not
 - Reranker ordering quality versus RRF-only baseline.
 - Groundedness: answer claims must be supported by selected evidence.
 - Source correctness: file, commit and line range must match the indexed snapshot.
+- Abstention/no-evidence correctness: when evidence is insufficient, the system must not fabricate a grounded answer.
 - FAST/THINK routing correctness.
 - Time to first token, retrieval latency, rerank latency, generation latency and total latency.
 

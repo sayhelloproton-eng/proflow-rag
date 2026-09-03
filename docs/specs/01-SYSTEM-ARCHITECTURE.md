@@ -1,6 +1,6 @@
 # System Architecture Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Public Path
 `Internet -> ChatGPT Site -> Site server -> Microsoft Dev Tunnel -> Mac NestJS API -> RAG -> iPhone model service`.

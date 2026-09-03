@@ -1,6 +1,6 @@
 # Context Builder Spec
 
-Status: DRAFT_FOR_FREEZE
+Status: FROZEN_V0_2026-09-03
 
 ## Goal
 Build a compact, grounded model context from reranked evidence without letting conversation history crowd out retrieved ProFlow facts.
