@@ -15,9 +15,9 @@ P1-A Source Authority：remote main → immutable commit → RepositorySnapshot
 → P1-H Knowledge Management Eval + Stage Closeout
 ```
 
-## 当前只允许 P1-A
+## 当前只允许 P1-B
 
-输入：远程 ProFlow GitHub `main`。输出：确定 `commitSha`、source identity 与后续 manifest 可消费的 RepositorySnapshot。失败必须 fail-closed；不得退回本地 workspace 当 source truth。
+P1-A 已验收：`f853aea` 把远程公开 `main` 固定为 RepositorySnapshot。P1-B 输入是这个 immutable commit；输出是稳定排序、带 include/exclude reason、可计算 hash 的 Corpus Manifest。不得读取本地 working tree，也不得提前 Parse/Chunk。
 
 ## 阶段原则
 
