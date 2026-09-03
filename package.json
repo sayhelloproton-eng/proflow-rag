@@ -1,0 +1,21 @@
+{
+  "name": "proflow-rag",
+  "private": true,
+  "version": "0.0.0",
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "architecture": "node scripts/dev/check-architecture.mjs",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "build": "pnpm -r --if-present run build",
+    "smoke:health": "node scripts/dev/health-smoke.mjs",
+    "verify:p0": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:config && pnpm smoke:health",
+    "smoke:config": "node scripts/dev/config-smoke.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "7.0.2"
+  }
+}
