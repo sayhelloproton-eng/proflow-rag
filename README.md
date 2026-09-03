@@ -4,14 +4,35 @@ Public RAG system and interactive site for understanding and evolving ProFlow.
 
 ## Current Stage
 
-The repository has been created as a public project. Implementation has not started yet; the current authority is the SDD specification set under `docs/specs/`.
+The public repository is established. Application implementation has not started yet; the authority is the SDD specification system under `docs/specs/`.
 
-## SDD Entry
+This project combines:
 
-Start with:
+- **SDD** for design governance and traceability;
+- **DDD** for bounded contexts, domain models and cross-context ownership;
+- **Capability Specs** for the explicit RAG pipeline;
+- **Verification** for retrieval, grounding, source, failure and latency evidence.
 
-- `docs/specs/00-PROFLOW-RAG-MASTER-SPEC.md`
-- `docs/specs/01-SYSTEM-ARCHITECTURE.md`
-- `docs/specs/16-IMPLEMENTATION-PLAN.md`
+## Specification Entry
 
-The project follows Spec-Driven Development. Specs are updated before material implementation changes. TDD is not the development driver; integration validation, smoke tests and RAG evals remain required quality gates.
+Start at `docs/specs/README.md`.
+
+The core reading path is:
+
+```text
+00-sdd-governance
+→ 01-product
+→ 02-system
+→ 03-domain
+→ 04-capabilities
+→ 05-contracts
+→ 06-runtime
+→ 07-verification
+→ 08-decisions
+```
+
+The current next gate is repository/module directory design. No NestJS application skeleton should be created before that ownership discussion is frozen.
+
+## Development Method
+
+Spec changes precede material implementation changes. V0 is not TDD-driven, but unit/integration checks, smoke paths and RAG Eval remain mandatory evidence. A feature is not accepted because it merely runs; it must satisfy the owning Spec and Verification gate.

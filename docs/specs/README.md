@@ -1,23 +1,39 @@
-# ProFlow RAG SDD 规格导航
+# ProFlow RAG｜SDD 规格入口
 
 状态：FROZEN_V0_2026-09-03
 
-本目录采用 **DDD（领域驱动设计）确定边界 + SDD（规格驱动开发）定义行为** 的组织方式。DDD 回答“谁负责什么、领域之间如何协作”，SDD 回答“这个领域必须怎样工作、如何验收”。
+本目录是 ProFlow RAG 的权威设计源。项目采用 **SDD（Spec-Driven Development）作为治理框架，DDD 作为核心业务建模方法，Capability Spec 描述 RAG 技术能力，Verification 负责证明实现符合规格**。
 
 ## 阅读顺序
-1. `00-总纲/00-产品总规格.md`：先理解产品目标与非目标。
-2. `00-总纲/01-系统上下文.md`：理解公网 Site、Mac、PostgreSQL、iPhone 模型和 GitHub 的关系。
-3. `00-总纲/02-领域地图.md`：理解六个边界以及它们之间的依赖方向。
-4. `00-总纲/03-架构裁决.md`：查看已经冻结的关键技术与产品裁决。
-5. 再按 Knowledge → Retrieval → Conversation → Evaluation → Platform → Delivery 阅读各领域规格。
 
-## 领域划分
-- `01-knowledge-知识构建域`：把 ProFlow `main` 的确定版本构造成可检索知识快照。
-- `02-retrieval-检索域`：把问题转换成有来源、有排序、有置信依据的 EvidenceSet（证据集）。
-- `03-conversation-会话问答域`：把用户问题与 EvidenceSet 组织成可流式、可引用、可多轮的回答。
-- `04-evaluation-评估审计域`：记录 RAG Trace、用户反馈和 Eval，回答“效果到底怎么样、哪里坏了”。
-- `05-platform-平台支撑域`：提供数据库、模型网关、安全、隧道、调度和运行时支撑。
-- `06-delivery-交付界面`：HTTP API 与 ChatGPT Sites，只负责交付，不拥有核心 RAG 业务规则。
+1. `00-sdd-governance/`：先理解 Spec 如何产生、冻结、变更和验收。
+2. `01-product/`：理解产品目标、用户场景、V0 范围和成功标准。
+3. `02-system/`：理解系统边界、在线/离线/审计数据流与故障模型。
+4. `03-domain/`：理解三个 Bounded Context、Context Map、统一语言与跨域契约。
+5. `04-capabilities/`：理解 Source → Chunk → Embed → Retrieve → Rerank → Evidence → Generate → Cite → Eval 的完整 RAG 能力链。
+6. `05-contracts/`：理解 HTTP、SSE、Model Gateway、数据库 ownership、错误和 Trace 的稳定契约。
+7. `06-runtime/`：理解 Mac、PostgreSQL、iPhone、Dev Tunnel、调度与生命周期。
+8. `07-verification/`：理解怎样证明系统真的正确、可靠、够快。
+9. `08-decisions/`：查看重要架构裁决的理由、替代方案与重新评估条件。
 
-## SDD 规则
-所有规格先处于 `DRAFT_REVIEW`。完成跨领域一致性审计后才能统一进入 `FROZEN_V0`。实现不得绕过规格做重大设计变更；确需改变边界、权威来源、公共契约或安全边界时，必须先修改拥有该决策的 Spec。
+## 设计主轴
+
+```text
+Requirement
+   ↓
+Product / System Spec
+   ↓
+DDD Domain Model + Context Map
+   ↓
+Capability / Contract / Runtime Spec
+   ↓
+Implementation
+   ↓
+Verification Evidence
+   ↓
+Spec Amendment（如果现实证明设计需要变化）
+```
+
+## 当前阶段
+
+实现尚未开始。当前门禁是：**规格体系与仓库目录讨论**。在代码目录 ownership 冻结前，不创建 NestJS 业务骨架。
