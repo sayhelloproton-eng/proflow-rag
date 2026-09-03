@@ -9,8 +9,9 @@ SDD_ARCHITECTURE = FROZEN
 DDD_CONTEXT_MAP = FROZEN
 REPOSITORY_OWNERSHIP = FROZEN
 CONTEXT_CONTINUITY = FROZEN
-IMPLEMENTATION = NOT_STARTED
-CURRENT_EXECUTION_GATE = P0_ENGINEERING_SKELETON
+P0_ENGINEERING_SKELETON = PASS
+IMPLEMENTATION = P0_BASELINE
+CURRENT_EXECUTION_GATE = P1_SOURCE_AUTHORITY_AND_CORPUS
 V0_RELEASE = NO
 ```
 
@@ -25,47 +26,48 @@ repo = /Users/agent/Desktop/proton-workspace/repos/proflow-rag
 branch = main
 HEAD = 接手时必须 git rev-parse HEAD 机械读取
 repository_layout_baseline = 115e7c5
-learning_governance_baseline = bd74dbb
 context_continuity_baseline = 7ded602
+p0_implementation_baseline = a09f9e1
+p0_practice_baseline = 3381713
 practice_repo = /Users/agent/Desktop/proton-workspace/repos/ai-agent-platform
-source_of_public_knowledge = ProFlow GitHub main @ immutable commit（P1 实现后启用）
+source_of_public_knowledge = ProFlow GitHub main @ immutable commit（P1 开始实现）
 ```
 
 ## LAST_COMPLETED
 
-- 已建立公开 `proflow-rag` 仓库、中文 SDD 体系、DDD Context Map、Capability/Contract/Runtime/Verification/ADR 结构。
-- 三个 Bounded Context 已冻结：Knowledge Management、Grounded Answering、Quality & Evaluation；跨 Context 只允许显式 Contract/Event/Port。
-- Repository layout 与数据 ownership 已冻结并创建纯 `.gitkeep` 占位；尚未创建 NestJS、Site、SQL 或业务脚本实现。
-- 独立实战档案已建立在 `ai-agent-platform/docs/learning/proflow-rag-engineering-practice/`。
-- 公共上下文四层机制已建立，P0 开始前具备跨 Chat 连续接管入口。
+- P0 已在 `a09f9e1` 建立 pnpm Workspace、NestJS 12 + Fastify 5 API、NodeNext/ESM TypeScript 基线、运行时 Config、公开 `/health`、唯一 `site-api-contract` 与 repo-owned architecture/config/health gates。
+- `a09f9e1` 精确 HEAD 上重新执行 `pnpm verify:p0`：`ARCHITECTURE_GATE=PASS / typecheck=PASS / build=PASS / CONFIG_SMOKE=PASS / HEALTH_SMOKE=PASS`，执行后无残留 API 进程且工作树 clean。
+- P0 真实暴露 TypeScript 7 移除旧 Node resolution、NestJS 12 ESM 边界、Registry ECONNRESET 三类工程事实；前两项通过 NodeNext/ESM 最小修复，网络抖动由 pnpm 正常重试后闭环。
+- P0 没有连接 PostgreSQL、iPhone 模型，也没有实现 Source/Chunk/Embedding/Retrieval/Generation/Site 业务，阶段边界保持完整。
 
 ## CURRENT_BLOCKER
 
-`NONE`。当前不是排障阶段；下一动作是 P0 第一轮教学与最小工程骨架实现。
+`NONE`。P0 已 PASS；当前进入 Knowledge Management 的第一实现单元。
 
 ## NEXT_ACTION
 
-1. 面向用户讲清 P0 第一实现单元：pnpm workspace + NestJS/Fastify 最小 API 为什么是后续 RAG 的承载边界，哪些内容本轮明确不实现。
-2. 读取 P0 owning Spec/ADR/Repository ownership，确定最小文件集合与 Gate。
-3. 小步创建基础工程骨架；先让 API build/typecheck/health smoke 成立。
-4. 再建立唯一共享 `site-api-contract` 和 architecture boundary gate；不提前进入 Knowledge 业务逻辑。
-5. P0 Round 结束更新 Verification Evidence、CURRENT 和实战档案，再决定是否进入 P1。
+1. 先向用户解释为什么 Knowledge 构建必须从 `remote main → immutable commit → RepositorySnapshot` 开始，以及“源码目录”与“可重现知识输入”为什么不是同一个概念。
+2. 读取 Knowledge Management Domain、Source Ingestion、One Corpus 与 Full Rebuild ADR，冻结 P1-A 最小输入/输出/失败条件。
+3. P1-A 只实现远程 `main` authority resolve、exact commit identity 与可审计 RepositorySnapshot/manifest 起点；不提前写 Chunk/Embedding。
+4. 用固定 commit 重放证明输入确定性，再进入 corpus include/exclude policy。
+5. 每个 P1 子 Gate 都同步 Verification Evidence、CURRENT 和实战档案。
 
 ## DO_NOT_REPEAT
 
-- 不重新讨论 SDD vs DDD；当前二者是互补关系。
-- 不重开已冻结的三个 Bounded Context、Repository ownership 和单仓决策，除非真实实现产生新证据。
-- 不提前实现 Retrieval/LLM/Site 业务功能来制造“看起来能跑”的 Demo。
-- 不把待实测模型、Top-K、timeout、context budget 写成冻结数字。
-- 不把聊天历史当项目真源，不默认全读 `90-历史记录`。
+- 不重开 P0 工程骨架；只有 `pnpm verify:p0` 新 regression 才回修。
+- 不重新讨论 SDD vs DDD、三个 Bounded Context 或 Repository ownership，除非真实实现出现冲突证据。
+- 不把本地 ProFlow workspace 当公开 RAG source authority；只认远程 GitHub `main` 的确定 commit。
+- 不直接从当前文件系统开始 Chunk，必须先形成 immutable source identity。
+- 不提前接 PostgreSQL/Embedding/LLM 来制造“完整 RAG”观感。
 - 不漏掉 `ai-agent-platform` 实战档案写回。
 
 ## REQUIRED_CONTEXT
 
-1. `docs/specs/README.md`
-2. `docs/specs/00-sdd-governance/00-SDD治理.md`
-3. `docs/specs/02-system/06-Repository-Structure-and-Ownership.md`
-4. `docs/specs/08-decisions/ADR-001-NestJS-Fastify.md`
-5. `docs/specs/08-decisions/ADR-011-Repository-Layout-and-Ownership.md`
-6. `docs/context/03-执行知识库/流程/P0-工程骨架.md`
-7. `/Users/agent/Desktop/proton-workspace/repos/ai-agent-platform/docs/learning/proflow-rag-engineering-practice/01_P0_工程与SDD执行骨架.md`
+1. `docs/specs/03-domain/knowledge-management/DOMAIN-SPEC.md`
+2. `docs/specs/03-domain/knowledge-management/DOMAIN-MODEL.md`
+3. `docs/specs/04-capabilities/source-ingestion/SPEC.md`
+4. `docs/specs/08-decisions/ADR-005-Full-Rebuild-Snapshot.md`
+5. `docs/specs/08-decisions/ADR-009-One-Corpus-ProFlow-main.md`
+6. `docs/specs/07-verification/06-Architecture-and-Security-Audit.md`
+7. `docs/context/03-执行知识库/流程/P1-Knowledge-Management.md`
+8. `/Users/agent/Desktop/proton-workspace/repos/ai-agent-platform/docs/learning/proflow-rag-engineering-practice/02_P1_Knowledge_Management知识构建.md`

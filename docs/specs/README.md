@@ -36,4 +36,4 @@ Spec Amendment（如果现实证明设计需要变化）
 
 ## 当前阶段
 
-实现尚未开始。仓库目录与模块 ownership、跨 Chat 上下文连续性机制均已冻结；执行入口见 `../context/README.md`。下一门禁是 P0 工程与 SDD 执行骨架，真实实现若证明目录或设计需要调整，先按变更流程修 Spec。
+P0 工程骨架已在实现基线 `a09f9e1` 通过 architecture/typecheck/build/config/health Gate；执行入口见 `../context/README.md`。当前进入 P1 Knowledge Management，先实现 remote `main` → immutable commit → RepositorySnapshot，再逐步进入 corpus、chunk、storage、embedding/index 与 snapshot activation。真实实现若证明目录或设计需要调整，先按变更流程修 Spec。

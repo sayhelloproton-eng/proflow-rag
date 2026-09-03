@@ -12,9 +12,10 @@
 
 | 当前目标 | Runbook |
 |---|---|
-| P0 工程与 SDD 执行骨架 | `流程/P0-工程骨架.md` |
+| P0 工程与 SDD 执行骨架（已 PASS） | `流程/P0-工程骨架.md` |
+| P1 Knowledge Management（当前） | `流程/P1-Knowledge-Management.md` |
 
-后续 P1～P8 只有在真正进入该阶段时才新增流程 Runbook，不提前制造空文档。
+后续 P2～P8 只有在真正进入该阶段时才新增流程 Runbook，不提前制造空文档。
 
 ## 组合规则
 

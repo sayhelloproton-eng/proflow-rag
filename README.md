@@ -4,7 +4,7 @@ Public RAG system and interactive site for understanding and evolving ProFlow.
 
 ## Current Stage
 
-The public repository is established. Application implementation has not started yet; the authority is the SDD specification system under `docs/specs/`.
+P0 engineering skeleton is implemented and verified. The current implementation gate is P1 Knowledge Management, starting from immutable ProFlow source authority.
 
 This project combines:
 
