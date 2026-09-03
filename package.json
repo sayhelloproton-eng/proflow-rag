@@ -12,7 +12,9 @@
     "build": "pnpm -r --if-present run build",
     "smoke:health": "node scripts/dev/health-smoke.mjs",
     "verify:p0": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:config && pnpm smoke:health",
-    "smoke:config": "node scripts/dev/config-smoke.mjs"
+    "smoke:config": "node scripts/dev/config-smoke.mjs",
+    "smoke:repository-snapshot": "node scripts/knowledge/repository-snapshot-smoke.mjs",
+    "verify:p1a": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:repository-snapshot"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
