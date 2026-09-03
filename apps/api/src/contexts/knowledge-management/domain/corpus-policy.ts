@@ -11,17 +11,21 @@ export type CorpusClass =
   | 'AGENT_KNOWLEDGE'
   | 'MODULE_METADATA';
 
+import type { RepositoryTreeEntry } from '../contracts/source-repository.port.js';
+
 export type CorpusExcludeReason =
   | 'SENSITIVE_PATH'
   | 'GENERATED_OR_RUNTIME'
   | 'UNSUPPORTED_BINARY'
-  | 'OUTSIDE_V0_CORPUS';
+  | 'OUTSIDE_V0_CORPUS'
+  | 'SYMLINK_ALIAS'
+  | 'UNSUPPORTED_GIT_ENTRY';
 
 export type CorpusPathDecision =
   | { status: 'accepted'; corpusClass: CorpusClass }
   | { status: 'excluded'; reason: CorpusExcludeReason };
 
-export const CORPUS_POLICY_VERSION = 'proflow-public-v0.1';
+export const CORPUS_POLICY_VERSION = 'proflow-public-v0.2';
 
 const sensitiveExtensions = /\.(?:p12|pfx|pem|key)$/i;
 const binaryExtensions = /\.(?:zip|png|jpe?g|gif|webp|pdf|bin)$/i;
@@ -31,6 +35,13 @@ const generatedSegments = new Set([
 const sensitiveSegments = new Set(['secret', 'secrets', 'credential', 'credentials', '.ssh']);
 const packageDocs = new Set(['README.md', 'DOCS.md', 'SETUP.md', 'SKILL.md']);
 const moduleMetadata = new Set(['package.json', 'proflow.module.json', 'conformance.json', 'manifest.json']);
+
+
+export function classifyCorpusEntry(entry: RepositoryTreeEntry): CorpusPathDecision {
+  if (entry.kind === 'SYMLINK') return { status: 'excluded', reason: 'SYMLINK_ALIAS' };
+  if (entry.kind !== 'FILE') return { status: 'excluded', reason: 'UNSUPPORTED_GIT_ENTRY' };
+  return classifyCorpusPath(entry.filePath);
+}
 
 export function classifyCorpusPath(filePath: string): CorpusPathDecision {
   const parts = filePath.split('/');

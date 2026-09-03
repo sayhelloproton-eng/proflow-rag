@@ -16,7 +16,9 @@
     "smoke:repository-snapshot": "node scripts/knowledge/repository-snapshot-smoke.mjs",
     "verify:p1a": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:repository-snapshot",
     "smoke:corpus-manifest": "node scripts/knowledge/corpus-manifest-smoke.mjs",
-    "verify:p1b": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:repository-snapshot && pnpm smoke:corpus-manifest"
+    "verify:p1b": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:repository-snapshot && pnpm smoke:corpus-manifest",
+    "smoke:chunking": "node scripts/knowledge/structure-aware-chunk-smoke.mjs",
+    "verify:p1c": "pnpm architecture && pnpm typecheck && pnpm build && pnpm smoke:repository-snapshot && pnpm smoke:corpus-manifest && pnpm smoke:chunking"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",

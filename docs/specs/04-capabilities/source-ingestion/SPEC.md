@@ -17,7 +17,7 @@ Owner：Knowledge Management
 
 ## Corpus Rules
 
-优先包含 README/docs/spec、真实 `packages/**/src` 与测试；排除 `.env*`、secret/credential、`node_modules`、dist/build、coverage、cache、logs、temp、机器私有文件和明显生成资产。过滤必须按 path + pattern + 可选内容安全检查共同执行。
+优先包含 README/docs/spec、真实 `packages/**/src` 与测试；排除 `.env*`、secret/credential、`node_modules`、dist/build、coverage、cache、logs、temp、机器私有文件和明显生成资产。过滤必须按 path + pattern + Git entry type + 可选内容安全检查共同执行。symlink 不作为独立 CorpusDocument 跟随读取；V0 将其作为 alias 显式排除并记录 reason，避免重复知识与路径逃逸。
 
 ## Invariants
 

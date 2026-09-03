@@ -16,8 +16,13 @@ const second = await useCase.execute(snapshot);
 assert.equal(first.entries.length, 873);
 assert.equal(second.manifestHash, first.manifestHash);
 assert.deepEqual(second.entries, first.entries);
+assert.equal(first.acceptedEntries.length, 806);
 assert.equal(first.acceptedEntries.some(entry => entry.filePath.endsWith('.zip')), false);
 assert.equal(first.acceptedEntries.some(entry => entry.filePath === 'spec/部署领域/03-流程与数据/04-部署状态-目录-Secret与安全.md'), true);
+assert.deepEqual(
+  first.excludedEntries.find(entry => entry.filePath === 'packages/agent-product/custom-gpt.openapi.yaml'),
+  { filePath: 'packages/agent-product/custom-gpt.openapi.yaml', status: 'excluded', reason: 'SYMLINK_ALIAS' },
+);
 assert.deepEqual(classifyCorpusPath('.env.production'), { status: 'excluded', reason: 'SENSITIVE_PATH' });
 assert.deepEqual(classifyCorpusPath('packages/demo/node_modules/x.ts'), { status: 'excluded', reason: 'GENERATED_OR_RUNTIME' });
 assert.deepEqual(classifyCorpusPath('packages/demo/dist/x.js'), { status: 'excluded', reason: 'GENERATED_OR_RUNTIME' });

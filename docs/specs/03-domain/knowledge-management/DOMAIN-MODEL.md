@@ -23,7 +23,7 @@ BUILDING → VALIDATING → READY → ACTIVE → RETIRED
 
 ## Value Objects
 
-- `SourceCoordinate(commitSha, filePath, startLine, endLine)`。
+- `SourceCoordinate(repository, commitSha, filePath, startLine, endLine)`。
 - `EmbeddingProfile(modelId, dimensions, instructionProfile, normalization, version)`。
 - `BuildProfile(parserVersion, chunkerVersion, corpusPolicyVersion)`。
 

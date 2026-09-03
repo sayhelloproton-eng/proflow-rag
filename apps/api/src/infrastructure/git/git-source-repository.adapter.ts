@@ -1,10 +1,13 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { lstat, mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type {
-  ListRepositoryFilesRequest,
+  ListRepositoryEntriesRequest,
+  ReadRepositoryFilesRequest,
+  RepositoryFileContent,
+  RepositoryTreeEntry,
   ResolveSourceRefRequest,
   SourceRepositoryPort,
 } from '../../contexts/knowledge-management/contracts/source-repository.port.js';
@@ -27,7 +30,7 @@ export class GitSourceRepositoryAdapter implements SourceRepositoryPort {
     return commitSha;
   }
 
-  async listFilesAtCommit(request: ListRepositoryFilesRequest): Promise<string[]> {
+  async listEntriesAtCommit(request: ListRepositoryEntriesRequest): Promise<RepositoryTreeEntry[]> {
     const repositoryDir = await mkdtemp(path.join(tmpdir(), 'proflow-rag-source-'));
     try {
       await this.runGit(['init', '--bare', '--quiet'], repositoryDir);
@@ -36,11 +39,41 @@ export class GitSourceRepositoryAdapter implements SourceRepositoryPort {
         request.repositoryUrl, request.commitSha,
       ], repositoryDir);
       const { stdout } = await this.runGit(
-        ['ls-tree', '-rz', '--name-only', 'FETCH_HEAD'],
+        ['ls-tree', '-rz', 'FETCH_HEAD'],
         repositoryDir,
         8 * 1024 * 1024,
       );
-      return stdout.split('\0').filter(Boolean).sort();
+      return stdout.split('\0').filter(Boolean).map(row => {
+        const tab = row.indexOf('\t');
+        if (tab < 0) throw new Error('SOURCE_TREE_ENTRY_INVALID');
+        const metadata = row.slice(0, tab).split(/\s+/);
+        const filePath = row.slice(tab + 1);
+        const mode = metadata[0];
+        const kind = mode === '120000' ? 'SYMLINK' : mode === '100644' || mode === '100755' ? 'FILE' : 'OTHER';
+        return { filePath, kind } satisfies RepositoryTreeEntry;
+      }).sort((a, b) => a.filePath.localeCompare(b.filePath));
+    } finally {
+      await rm(repositoryDir, { recursive: true, force: true });
+    }
+  }
+
+  async readFilesAtCommit(request: ReadRepositoryFilesRequest): Promise<RepositoryFileContent[]> {
+    const repositoryDir = await mkdtemp(path.join(tmpdir(), 'proflow-rag-content-'));
+    try {
+      await this.runGit(['init', '--quiet'], repositoryDir);
+      await this.runGit([
+        'fetch', '--quiet', '--no-tags', '--depth=1', request.repositoryUrl, request.commitSha,
+      ], repositoryDir, 32 * 1024 * 1024);
+      await this.runGit(['checkout', '--quiet', '--detach', 'FETCH_HEAD'], repositoryDir, 32 * 1024 * 1024);
+      const files: RepositoryFileContent[] = [];
+      for (const filePath of request.filePaths) {
+        if (!filePath || filePath.startsWith('/') || filePath.includes('../')) throw new Error('SOURCE_FILE_PATH_INVALID');
+        const absolute = path.join(repositoryDir, ...filePath.split('/'));
+        const stat = await lstat(absolute);
+        if (!stat.isFile() || stat.isSymbolicLink()) throw new Error(`SOURCE_FILE_NOT_REGULAR:${filePath}`);
+        files.push({ filePath, content: await readFile(absolute, 'utf8') });
+      }
+      return files;
     } finally {
       await rm(repositoryDir, { recursive: true, force: true });
     }
