@@ -15,9 +15,9 @@ P1-A Source Authority：remote main → immutable commit → RepositorySnapshot
 → P1-H Knowledge Management Eval + Stage Closeout
 ```
 
-## 当前只允许 P1-B
+## 当前门禁：P1-C Review
 
-P1-A 已验收：`f853aea` 把远程公开 `main` 固定为 RepositorySnapshot。P1-B 输入是这个 immutable commit；输出是稳定排序、带 include/exclude reason、可计算 hash 的 Corpus Manifest。不得读取本地 working tree，也不得提前 Parse/Chunk。
+P1-A / P1-B 已验收。P1-C 候选 `73b2450` 已完成 structure-aware Chunk 与全量真实验证，但用户尚未确认。当前禁止进入 P1-D；先审阅 806 个独立知识文件 → 7,624 Chunk 的切分质量、SourceCoordinate round-trip、parser mode 与尺寸分布。P1-C 只有在用户明确确认后才 closeout。
 
 ## 阶段原则
 

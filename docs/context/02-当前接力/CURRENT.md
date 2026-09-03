@@ -15,9 +15,11 @@ P0_USER_REVIEW = PASS
 P0_FINAL_ACCEPTANCE = PASS
 P1_A_SOURCE_AUTHORITY = PASS
 P1_B_CORPUS_POLICY = PASS
-P1_C_STRUCTURE_AWARE_CHUNKING = NOT_STARTED
-P1_IMPLEMENTATION = P1_B_BASELINE
-CURRENT_EXECUTION_GATE = P1_C_STRUCTURE_AWARE_CHUNKING
+P1_C_IMPLEMENTATION_CANDIDATE = READY
+P1_C_MECHANICAL_GATE = PASS
+P1_C_USER_REVIEW = PENDING
+P1_IMPLEMENTATION = P1_C_CANDIDATE
+CURRENT_EXECUTION_GATE = P1_C_REVIEW_AND_ACCEPTANCE
 V0_RELEASE = NO
 ```
 
@@ -40,6 +42,10 @@ practice_repo = /Users/agent/Desktop/proton-workspace/repos/ai-agent-platform
 source_of_public_knowledge = ProFlow GitHub main @ immutable commit
 p1_a_implementation_baseline = f853aea
 p1_a_user_acceptance = PASS（2026-09-04）
+p1_b_implementation_baseline = f073fee
+p1_b_user_acceptance = PASS（2026-09-04）
+p1_b_policy_amendment = proflow-public-v0.2（P1-C 内容读取发现 1 个 symlink alias，已显式排除）
+p1_c_implementation_candidate = 73b2450
 ```
 
 ## LAST_COMPLETED
@@ -48,21 +54,22 @@ p1_a_user_acceptance = PASS（2026-09-04）
 - 用户已理解并确认：Fastify 是 HTTP 服务运行层而非网关；`site-api-contract` 是 Site/API 之间极细的 wire contract 包；Architecture Gate 只守部署、领域、共享契约和数据 ownership 等“承重墙”，不锁死普通内部重构。
 - P0 没有实现任何 RAG 业务；Knowledge Management 已进入 P1。
 - P1-A 已在 `f853aea` 建立 `remote main → immutable commit → RepositorySnapshot`：公开 HTTPS ProFlow `main` 通过 `git ls-remote` 解析远端 authority，不读取本地 workspace 作为知识真源。
-- P1-B 已在 `f073fee` 建立 deterministic Corpus Manifest：固定 commit 共 873 个 tracked files，接纳 807、排除 66；manifest hash=`317cce336cd79ef93ff559443b458acbddadf1be374043cac30ebd0af20e02db`，重复构建完全一致。
-- 真实 smoke 连续两次解析得到同一 SHA `c85e986b56eca8be3e5c016a14bc1470ee656d87`；Architecture/typecheck/build 同时 PASS。
+- P1-B 原验收基线 `f073fee` 在 P1-C 真实内容读取时发现 1 个 symlink alias；Corpus Policy 已 amendment 为 `proflow-public-v0.2`：873 个 Git tree entries，接纳 806、排除 67（含 `SYMLINK_ALIAS=1`），manifest hash=`66e5c6adee6ffd7cfb8f8c3fb6070e75fe2f7e30d03c42e361c12b094077e7b2`。
+- P1-C implementation candidate `73b2450` 已把 806 个独立知识文件构建为 7,624 个 Chunk；Markdown heading / TypeScript AST / Test AST / text fallback 全量通过，`TYPESCRIPT_FALLBACK_FILES=0`，SourceCoordinate round-trip 全量成立。
+- `pnpm verify:p1c` 已 PASS；chunk set hash=`9eebf18021540313177ce67806e2caa01842a530d84e4be7f7c7c98cf1c55dce`，chunk size chars p50=296 / p95=4281 / max=6000。
 - 用户已确认 P1-A；RepositorySnapshot 只定义源码输入身份，KnowledgeSnapshot 仍需经过 Corpus/Chunk/Embedding/Index/Validate 后才成立。
 - `696482b` 的提前 closeout 保留为流程教训；后续必须遵守“候选 → 验证 → 讲解/讨论 → 用户确认 → closeout”。
 
 ## CURRENT_BLOCKER
 
-`NONE`。P1-B 已正式结项，当前进入 P1-C Structure-aware Chunking。
+`NONE`。P1-C 实现候选与机械 Gate 已完成；当前只等待用户审阅切块策略与真实数据。
 
 ## NEXT_ACTION
 
-1. P1-C 先讲清 Chunking（切块）：为什么文件不能直接整篇进入检索，以及“语义边界”比固定字符数更重要。
-2. 检查现有 Chunk/SourceCoordinate Spec，先用真实 ProFlow Markdown / TypeScript / Test 样本做切块基线。
-3. 实现 structure-aware chunk candidate，保留 `commitSha + filePath + line range` 可追溯坐标。
-4. 跑固定 commit 的真实样本与统计，形成候选后停止；未经用户确认不 closeout P1-C、不进入 PostgreSQL/Embedding。
+1. 停止继续实现，不进入 P1-D PostgreSQL/pgvector。
+2. 向用户审阅 P1-C：为什么按语义结构切、806→7,624 的真实分布、Markdown/Code/Test 样本、p50/p95/max、0 TypeScript fallback、SourceCoordinate round-trip。
+3. 讨论 Chunk 是否过碎/过大、测试 setup 与 testcase 的完整性、6,000 chars 上限是否只作为 V0 baseline。
+4. 只有用户明确确认 P1-C 后，才更新 ai-agent-platform 的 P1-C 学习结论、正式 closeout，并进入 P1-D。
 
 ## DO_NOT_REPEAT
 
@@ -71,6 +78,7 @@ p1_a_user_acceptance = PASS（2026-09-04）
 - 不直接从“眼前目录”开始 Chunk；P1-B 必须基于 P1-A 的 immutable commit。
 - 不把“Git 仓库里存在的所有文件”自动等同于 RAG Corpus；准入规则必须可解释、可审计、可重复。
 - 不提前接 PostgreSQL、Embedding 或 LLM 来制造完整 RAG 观感。
+- 不把 `verify:p1c=PASS` 等价成 P1-C 已验收；当前 `P1_C_USER_REVIEW=PENDING`。
 - 不跳过用户确认门自动推进 P1 子阶段。
 
 ## REQUIRED_CONTEXT
