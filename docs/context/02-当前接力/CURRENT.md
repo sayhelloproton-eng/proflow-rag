@@ -24,7 +24,9 @@ V0_RELEASE = NO
 repo = /Users/agent/Desktop/proton-workspace/repos/proflow-rag
 branch = main
 HEAD = 接手时必须 git rev-parse HEAD 机械读取
-last_completed_design_commit = bd74dbb
+repository_layout_baseline = 115e7c5
+learning_governance_baseline = bd74dbb
+context_continuity_baseline = 7ded602
 practice_repo = /Users/agent/Desktop/proton-workspace/repos/ai-agent-platform
 source_of_public_knowledge = ProFlow GitHub main @ immutable commit（P1 实现后启用）
 ```
