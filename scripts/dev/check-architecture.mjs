@@ -1,3 +1,9 @@
+/**
+ * 文件职责：机械检查被冻结的仓库结构、Context ownership 与跨域依赖承重墙。
+ * 所属层：Development Verification。
+ * 关键边界：只守架构不变量，不把普通内部重构锁死成“架构违规”。
+ */
+
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -40,6 +46,7 @@ for (const file of await walk(contextsRoot)) {
     const relative = path.relative(contextsRoot, target);
     if (relative.startsWith('..')) continue;
     const targetOwner = relative.split(path.sep)[0];
+    // Context 只能通过公开 contracts 协作；深 import 对方内部实现会破坏 ownership 与后续独立演进。
     if (targetOwner !== owner && !relative.includes(`${path.sep}contracts${path.sep}`)) {
       problems.push(`${path.relative(root, file)} deep-imports context ${targetOwner}`);
     }

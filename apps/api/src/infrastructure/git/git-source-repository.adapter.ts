@@ -24,6 +24,7 @@ export class GitSourceRepositoryAdapter implements SourceRepositoryPort {
   constructor(private readonly timeoutMs = 30_000) {}
 
   async resolveCommit(request: ResolveSourceRefRequest): Promise<string> {
+    // 直接询问远端 authority，避免本地 clone/cache 的 main 落后却被误当成公共知识真源。
     const fullRef = `refs/heads/${request.ref}`;
     const { stdout } = await this.runGit(
       ['ls-remote', '--exit-code', request.repositoryUrl, fullRef],
@@ -40,6 +41,7 @@ export class GitSourceRepositoryAdapter implements SourceRepositoryPort {
     const repositoryDir = await mkdtemp(path.join(tmpdir(), 'proflow-rag-source-'));
     try {
       await this.runGit(['init', '--bare', '--quiet'], repositoryDir);
+      // P1-B 只需要 tree metadata；blob:none 避免为了枚举文件提前下载全部文件内容。
       await this.runGit([
         'fetch', '--quiet', '--no-tags', '--filter=blob:none', '--depth=1',
         request.repositoryUrl, request.commitSha,
@@ -65,6 +67,7 @@ export class GitSourceRepositoryAdapter implements SourceRepositoryPort {
   }
 
   async readFilesAtCommit(request: ReadRepositoryFilesRequest): Promise<RepositoryFileContent[]> {
+    // 到 P1-C 才真正读取 blob；此时输入已经被 Corpus Manifest 收敛为允许进入知识库的文件。
     const repositoryDir = await mkdtemp(path.join(tmpdir(), 'proflow-rag-content-'));
     try {
       await this.runGit(['init', '--quiet'], repositoryDir);

@@ -1,3 +1,9 @@
+/**
+ * 文件职责：验证运行时配置的默认值、自定义值与非法输入 fail-fast 行为。
+ * 所属层：Development Smoke Verification。
+ * 关键边界：验证真实构建产物的配置行为，不以 TypeScript 编译通过替代运行验证。
+ */
+
 import { loadRuntimeConfig } from '../../apps/api/dist/infrastructure/config/runtime-config.js';
 
 const defaults = loadRuntimeConfig({});

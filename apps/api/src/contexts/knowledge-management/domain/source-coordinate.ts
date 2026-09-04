@@ -28,6 +28,7 @@ export class SourceCoordinate {
   }
 
   static create(props: SourceCoordinateProps): SourceCoordinate {
+    // Citation 以后直接依赖这个值对象，因此在进入 Domain 时就拒绝可漂移/不可回读的坐标。
     const repositoryUrl = props.repositoryUrl.trim();
     const commitSha = props.commitSha.trim().toLowerCase();
     const filePath = props.filePath.trim();

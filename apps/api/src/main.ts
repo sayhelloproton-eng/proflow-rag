@@ -1,3 +1,9 @@
+/**
+ * 文件职责：作为 API Composition Root 启动 NestJS + Fastify 服务。
+ * 所属层：API Bootstrap。
+ * 关键边界：入口只负责组装与启动，不承载领域逻辑；真实业务通过模块和 Context 进入。
+ */
+
 import 'reflect-metadata';
 
 import { NestFactory } from '@nestjs/core';

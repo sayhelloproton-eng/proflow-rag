@@ -1,3 +1,9 @@
+/**
+ * 文件职责：在固定真实 ProFlow commit 上验证 Corpus Manifest 的确定性、准入与排除规则。
+ * 所属层：Knowledge Management Verification。
+ * 关键边界：使用真实 Git tree 重放 policy，确保 manifest hash 与排除原因可审计。
+ */
+
 import assert from 'node:assert/strict';
 import { BuildCorpusManifest } from '../../apps/api/dist/contexts/knowledge-management/application/build-corpus-manifest.js';
 import { classifyCorpusPath } from '../../apps/api/dist/contexts/knowledge-management/domain/corpus-policy.js';
@@ -10,6 +16,7 @@ const snapshot = RepositorySnapshot.create({
   commitSha: 'c85e986b56eca8be3e5c016a14bc1470ee656d87',
 });
 const useCase = new BuildCorpusManifest(new GitSourceRepositoryAdapter());
+// 对同一 immutable commit 完整构建两次，证明 policy + tree 能得到同一份 deterministic manifest。
 const first = await useCase.execute(snapshot);
 const second = await useCase.execute(snapshot);
 
@@ -18,7 +25,9 @@ assert.equal(second.manifestHash, first.manifestHash);
 assert.deepEqual(second.entries, first.entries);
 assert.equal(first.acceptedEntries.length, 806);
 assert.equal(first.acceptedEntries.some(entry => entry.filePath.endsWith('.zip')), false);
+// “讨论 Secret 的文档”仍是知识；过滤的是敏感资产，不是包含 security/secret 词汇的正常说明。
 assert.equal(first.acceptedEntries.some(entry => entry.filePath === 'spec/部署领域/03-流程与数据/04-部署状态-目录-Secret与安全.md'), true);
+// symlink 指向已经入库的真实 OpenAPI 文件，必须作为 alias 排除，否则同一知识会重复索引/重复召回。
 assert.deepEqual(
   first.excludedEntries.find(entry => entry.filePath === 'packages/agent-product/custom-gpt.openapi.yaml'),
   { filePath: 'packages/agent-product/custom-gpt.openapi.yaml', status: 'excluded', reason: 'SYMLINK_ALIAS' },

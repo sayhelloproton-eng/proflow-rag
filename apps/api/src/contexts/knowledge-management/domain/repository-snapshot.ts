@@ -1,3 +1,9 @@
+/**
+ * 文件职责：定义 ProFlow 源码原料批次的不可变身份。
+ * 所属层：Knowledge Management / Domain。
+ * 关键边界：RepositorySnapshot 只表示 repository/ref/commit，不等同于已构建完成的 KnowledgeSnapshot。
+ */
+
 export interface RepositorySnapshotProps {
   repositoryUrl: string;
   ref: string;
@@ -28,6 +34,7 @@ export class RepositorySnapshot {
   }
 
   sameSourceIdentity(other: RepositorySnapshot): boolean {
+    // ref 只说明“为什么选到这个 commit”；真正的源码身份由 repository + immutable commit 决定。
     return this.repositoryUrl === other.repositoryUrl && this.commitSha === other.commitSha;
   }
 }

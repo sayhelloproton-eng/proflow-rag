@@ -84,6 +84,7 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
         structure: { kind: 'DOCUMENT_SECTION', parserMode: 'MARKDOWN_HEADING', label: 'preamble' },
       });
     }
+    // headingPath 保存章节层级，后续检索/展示可以知道一个小节属于哪个父章节，而不只看到孤立标题。
     const headingPath: string[] = [];
     headings.forEach((heading, index) => {
       headingPath.length = heading.level - 1;
@@ -113,6 +114,7 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
   private chunkTypeScript(content: string, filePath: string): RawChunk[] {
     const ast = this.parseTypeScript(content, filePath);
     const chunks: RawChunk[] = [];
+    // import/普通表达式等没有独立检索语义的顶层语句先聚合，避免产生大量碎片 Chunk。
     const buffered: t.Statement[] = [];
     const flushBuffered = () => {
       if (!buffered.length) return;
@@ -128,6 +130,7 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
         continue;
       }
       flushBuffered();
+      // 大 class 整体召回会混入过多无关方法；只有超过上限时才下钻到 member，保留正常 class 的整体语义。
       if (t.isClassDeclaration(statement) && this.nodeTextLength(statement) > this.maxChunkChars && statement.body.body.length) {
         const parent = statement.id?.name ?? 'anonymous class';
         for (const member of statement.body.body) {
@@ -177,15 +180,18 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
       const call = this.callName(node.callee);
       const title = this.stringArgument(node.arguments[0]);
       if ((call === 'describe' || call === 'context') && title) {
+        // describe/context 本身不是最终证据单元，只把 suite 名压入路径，让 testcase label 保留完整语义上下文。
         this.visitChildren(node, [...suites, title], topLevel, chunks, occupiedTopLevel);
         return;
       }
       if ((call === 'test' || call === 'it') && title) {
+        // testcase 作为独立 Chunk，可完整保留“场景 + 操作 + 断言”，比固定行数切分更适合作为行为证据。
         chunks.push(this.nodeRange(node, node, 'TEST_CASE', 'TEST_AST', [...suites, title].join(' > ')));
         occupiedTopLevel.add(topLevel);
         return;
       }
       if (['before', 'beforeEach', 'after', 'afterEach'].includes(call ?? '')) {
+        // setup/teardown 单独标识，避免与 testcase 混为一块；后续检索可根据需要关联，而不是丢失测试前置条件。
         chunks.push(this.nodeRange(node, node, 'TEST_SETUP', 'TEST_AST', [...suites, call!].join(' > ')));
         occupiedTopLevel.add(topLevel);
         return;

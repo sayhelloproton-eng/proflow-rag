@@ -1,3 +1,9 @@
+/**
+ * 文件职责：把环境变量规范化为 API 启动所需的运行时配置。
+ * 所属层：Infrastructure / Config。
+ * 关键边界：配置在进程启动前完成校验，非法端口直接 fail fast，避免带病启动。
+ */
+
 export interface RuntimeConfig {
   host: string;
   port: number;

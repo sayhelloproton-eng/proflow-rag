@@ -1,3 +1,9 @@
+/**
+ * 文件职责：启动真实构建后的 API 进程并验证 /health 可用，再清理子进程。
+ * 所属层：Development Smoke Verification。
+ * 关键边界：证明“真实进程能启动/监听/响应”，不是只验证函数或类型。
+ */
+
 import { spawn } from 'node:child_process';
 import net from 'node:net';
 import path from 'node:path';
@@ -6,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const entry = path.join(root, 'apps/api/dist/main.js');
 
+// 使用临时空闲端口，避免本地固定端口占用把 smoke 误判成应用失败。
 const port = await new Promise((resolve, reject) => {
   const server = net.createServer();
   server.once('error', reject);
@@ -41,5 +48,6 @@ try {
   }
   console.log(`HEALTH_SMOKE=PASS port=${port}`);
 } finally {
+  // smoke 无论成功失败都必须回收真实 API 子进程，避免测试污染后续 runtime。
   child.kill('SIGTERM');
 }
