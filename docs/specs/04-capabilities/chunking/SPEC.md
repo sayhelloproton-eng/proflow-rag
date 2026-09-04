@@ -1,6 +1,6 @@
 # Capability｜Parsing & Structure-aware Chunking
 
-状态：REVIEWED_V0_2026-09-03
+状态：VERIFIED_V0_2026-09-05
 Owner：Knowledge Management
 
 ## Purpose
@@ -35,4 +35,6 @@ max tokens/chars、overlap、最小块大小、代码 parser 实现均由真实 
 
 ## Acceptance
 
-随机抽样 Chunk 可回到原 commit 文件对应行；Doc/Code/Test benchmark 比固定切片在期望 Evidence recall 上不劣，目标是明显更好。
+P1-C 当前验收只判断此阶段已经能够真实证明的结构正确性：所有 Chunk 必须可回到固定 repository/commit/file/lines 的原文；Doc/Code/Test parser 必须在真实 Corpus 上完成全量构建，parser fallback、尺寸分布与稳定 chunk-set hash 必须可观察。
+
+“Structure-aware 与固定切片相比，哪一种更容易检索到真正有用证据”的 Evidence recall 对比依赖后续 Retrieval harness。该质量门不在 P1-C 伪造结论，延后到 P1-H / Retrieval Eval 使用真实查询集验证；若结果不优，必须反向修订 chunker/profile。

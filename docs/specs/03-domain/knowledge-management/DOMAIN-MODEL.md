@@ -1,6 +1,6 @@
 # Knowledge Management｜Domain Model
 
-状态：FROZEN_V0_2026-09-03
+状态：FROZEN_V0_2026-09-05（P1-C closeout amendment）
 
 ## Aggregate：KnowledgeSnapshot
 
@@ -14,6 +14,13 @@ BUILDING → VALIDATING → READY → ACTIVE → RETIRED
 ```
 
 只有 `READY` 可以尝试 activation；同一时刻只能有一个 ACTIVE。旧 ACTIVE 在新版本成功激活后进入 RETIRED，并至少保留上一成功版本用于快速回滚。
+
+## Source / Build Records
+
+- `RepositorySnapshot(repositoryUrl, ref, commitSha)`：一次知识构建使用的不可变源码输入身份；`ref` 记录来源，真正稳定身份由 repository + commitSha 决定。
+- `CorpusManifest(policyVersion, repositoryUrl, sourceCommitSha, entries, manifestHash)`：对固定 RepositorySnapshot 应用 Corpus Policy 后得到的确定性准入清单；同一 source + policy 必须得到稳定 entries/hash。
+
+这两个对象描述 KnowledgeSnapshot 构建前的 source/build truth，不与最终可查询的 KnowledgeSnapshot 合并。
 
 ## Entities
 

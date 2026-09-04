@@ -1,6 +1,6 @@
 # Knowledge Management｜Domain Spec
 
-状态：FROZEN_V0_2026-09-03
+状态：FROZEN_V0_2026-09-05（P1-C closeout amendment）
 
 ## Mission
 
@@ -13,7 +13,7 @@
 ## Core Invariants
 
 - `DOM-KM-001`：每个 Snapshot 必须绑定一个且仅一个 source commit。
-- `DOM-KM-002`：Chunk 必须可定位 `commit + path + lines`。
+- `DOM-KM-002`：Chunk 必须可定位 `repository + commit + path + lines`，避免在多仓库语境下出现来源歧义。
 - `DOM-KM-003`：一个 Snapshot 只能使用一个确定 EmbeddingProfile。
 - `DOM-KM-004`：candidate build 不可修改 Active Snapshot 的可见数据。
 - `DOM-KM-005`：activation 是原子状态切换。

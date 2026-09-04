@@ -15,9 +15,11 @@ P1-A Source Authority：remote main → immutable commit → RepositorySnapshot
 → P1-H Knowledge Management Eval + Stage Closeout
 ```
 
-## 当前门禁：P1-C Review
+## 当前门禁：P1-D PostgreSQL / pgvector
 
-P1-A / P1-B 已验收。P1-C 候选 `73b2450` 已完成 structure-aware Chunk 与全量真实验证，但用户尚未确认。当前禁止进入 P1-D；先审阅 806 个独立知识文件 → 7,624 Chunk 的切分质量、SourceCoordinate round-trip、parser mode 与尺寸分布。P1-C 只有在用户明确确认后才 closeout。
+P1-A / P1-B / P1-C 已验收。P1-C 基线 `73b2450` 已完成 806 个独立知识文件 → 7,624 Chunk 的 structure-aware Chunking，并通过 SourceCoordinate round-trip、parser mode 与全量真实 smoke。用户选择把 Chunking 细节留到最终集中复盘，并于 2026-09-05 明确继续。
+
+下一步进入 P1-D 前，先完成 P1-C closeout working tree 的用户审阅与 commit；之后只实现 Knowledge ownership schema + repository adapter，不提前进入 Embedding。
 
 ## 阶段原则
 
