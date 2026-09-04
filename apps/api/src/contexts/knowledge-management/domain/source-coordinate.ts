@@ -1,3 +1,9 @@
+/**
+ * 文件职责：定义一个知识片段在不可变源码中的真实位置。
+ * 所属层：Knowledge Management / Domain Value Object。
+ * 关键边界：repository + commitSha + filePath + lines 共同构成可复现来源；不能用会移动的 main 代替 commit。
+ */
+
 export interface SourceCoordinateProps {
   repositoryUrl: string;
   commitSha: string;

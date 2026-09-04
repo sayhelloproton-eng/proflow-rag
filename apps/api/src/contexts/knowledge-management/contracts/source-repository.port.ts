@@ -1,3 +1,9 @@
+/**
+ * 文件职责：声明 Knowledge Management 读取远端源码真源所需的最小仓库能力。
+ * 所属层：Knowledge Management / Contract Port。
+ * 关键边界：上层只表达“解析 commit、枚举 Git tree、读取固定 commit 文件”，不感知 Git CLI 实现细节。
+ */
+
 export interface ResolveSourceRefRequest {
   repositoryUrl: string;
   ref: string;

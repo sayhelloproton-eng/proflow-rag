@@ -1,3 +1,9 @@
+/**
+ * 文件职责：定义 ProFlow 公共 RAG 的语料准入/排除政策，并为每个 Git tree entry 给出可审计原因。
+ * 所属层：Knowledge Management / Domain Policy。
+ * 关键边界：这里只决定“哪些原始文件有资格成为知识”，不读取文件内容，也不负责 Chunk/Embedding。
+ */
+
 export type CorpusClass =
   | 'ROOT_DOC'
   | 'SPEC'
@@ -38,6 +44,7 @@ const moduleMetadata = new Set(['package.json', 'proflow.module.json', 'conforma
 
 
 export function classifyCorpusEntry(entry: RepositoryTreeEntry): CorpusPathDecision {
+  // symlink 只是另一个文件的别名；重复索引会制造重复知识与重复召回，因此显式排除并保留审计原因。
   if (entry.kind === 'SYMLINK') return { status: 'excluded', reason: 'SYMLINK_ALIAS' };
   if (entry.kind !== 'FILE') return { status: 'excluded', reason: 'UNSUPPORTED_GIT_ENTRY' };
   return classifyCorpusPath(entry.filePath);

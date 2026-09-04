@@ -1,3 +1,9 @@
+/**
+ * 文件职责：定义 RAG 检索的最小知识单元 KnowledgeChunk 及其结构元数据。
+ * 所属层：Knowledge Management / Domain。
+ * 关键边界：Chunk 同时保存内容、真实来源坐标和结构语义；不包含检索 score、Evidence 或回答状态。
+ */
+
 import { SourceCoordinate } from './source-coordinate.js';
 
 export type ChunkKind =

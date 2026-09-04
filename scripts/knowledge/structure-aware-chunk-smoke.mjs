@@ -1,3 +1,9 @@
+/**
+ * 文件职责：在固定的真实 ProFlow commit 上全量验证 P1-C 结构感知切块，而不是只验证人造 fixture。
+ * 所属层：Verification / Knowledge smoke。
+ * 关键证据：文档数量、Chunk 分布、parser fallback、SourceCoordinate 可回读性与稳定 chunk-set hash。
+ */
+
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { BuildCorpusChunks } from '../../apps/api/dist/contexts/knowledge-management/application/build-corpus-chunks.js';
@@ -6,6 +12,7 @@ import { RepositorySnapshot } from '../../apps/api/dist/contexts/knowledge-manag
 import { GitSourceRepositoryAdapter } from '../../apps/api/dist/infrastructure/git/git-source-repository.adapter.js';
 import { StructureAwareDocumentChunker } from '../../apps/api/dist/infrastructure/parsing/structure-aware-document-chunker.js';
 
+// 固定 immutable commit，保证每次机械验证面对的是同一批真实知识原料。
 const snapshot = RepositorySnapshot.create({
   repositoryUrl: 'https://github.com/sayhelloproton-eng/proflow.git',
   ref: 'main',
@@ -36,6 +43,7 @@ assert.ok(lifecycleCase?.structure.label, 'lifecycle test should expose testcase
 const cliSymbol = result.chunks.find(chunk => chunk.source.filePath === 'packages/platform-cli/src/cli.ts' && chunk.structure.kind === 'CODE_SYMBOL');
 assert.ok(cliSymbol?.structure.label, 'platform-cli source should expose code symbol label');
 
+// 对完整 Chunk 集合计算稳定 hash，用于发现切块逻辑或顺序发生的非预期漂移。
 const canonical = result.chunks.map(chunk => ({
   filePath: chunk.source.filePath,
   startLine: chunk.source.startLine,

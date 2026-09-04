@@ -1,3 +1,9 @@
+/**
+ * 文件职责：按文档/代码/测试的语义结构把 CorpusDocument 切成可检索 KnowledgeChunk。
+ * 所属层：Infrastructure / Parsing Adapter，实现 DocumentChunkerPort。
+ * 关键边界：优先保留 Markdown heading、TypeScript symbol、test/setup 等语义边界；固定长度只用于过大结构的二次切分。
+ */
+
 import { parse } from '@babel/parser';
 import * as t from '@babel/types';
 import type { ChunkDocumentRequest, DocumentChunkerPort } from '../../contexts/knowledge-management/contracts/document-chunker.port.js';
@@ -46,6 +52,7 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
 
   private selectStrategy(request: ChunkDocumentRequest, lines: string[]): RawChunk[] {
     const lower = request.filePath.toLowerCase();
+    // 先按内容类型选择语义策略；只有解析失败或非结构文本才退化到安全文本切分。
     if (lower.endsWith('.md')) return this.chunkMarkdown(lines);
     if (lower.endsWith('.ts') || lower.endsWith('.tsx')) {
       const isTest = request.corpusClass === 'TEST' || request.corpusClass === 'LIVE_TEST';
@@ -54,6 +61,7 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
           ? this.chunkTests(request.content, request.filePath)
           : this.chunkTypeScript(request.content, request.filePath);
       } catch {
+        // 解析失败不能让整个 snapshot 构建崩溃；退化模式会被 parserMode 记录，后续 Eval 可发现并处理。
         return this.chunkText(lines, 'TYPESCRIPT_FALLBACK', isTest ? 'TEST_CASE' : 'CODE_BLOCK');
       }
     }
@@ -211,6 +219,7 @@ export class StructureAwareDocumentChunker implements DocumentChunkerPort {
 
   private splitIfOversized(raw: RawChunk, lines: string[]): RawChunk[] {
     const text = lines.slice(raw.startLine - 1, raw.endLine).join('\n');
+    // 语义边界优先；只有单个语义单元过大时才做带 overlap 的二次切分，尽量避免先按长度撕裂语义。
     if (text.length <= this.maxChunkChars) return [raw];
     const result: RawChunk[] = [];
     let start = raw.startLine;

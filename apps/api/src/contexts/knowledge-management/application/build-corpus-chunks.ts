@@ -1,3 +1,10 @@
+/**
+ * 文件职责：把已验收的 Corpus Manifest 转换为可检索的 KnowledgeChunk 集合。
+ * 所属层：Knowledge Management / Application。
+ * 关键边界：只消费固定 RepositorySnapshot 的文件；不决定语料准入规则，也不负责持久化或向量化。
+ * 重要保证：每个 Chunk 都必须通过 SourceCoordinate 回读到原文件原行，避免后续 Citation 建立在虚构坐标上。
+ */
+
 import type { DocumentChunkerPort } from '../contracts/document-chunker.port.js';
 import type { SourceRepositoryPort } from '../contracts/source-repository.port.js';
 import type { CorpusManifest } from '../domain/corpus-manifest.js';
@@ -37,6 +44,7 @@ export class BuildCorpusChunks {
       corpusClass: corpusClassByPath.get(file.filePath)!,
       content: file.content,
     }));
+    // Citation 的可信度从这里开始：Chunk 保存的行号必须能逐字回读出同一份原文。
     this.assertSourceRoundTrip(files, chunks);
     chunks.sort((a, b) => a.source.filePath.localeCompare(b.source.filePath)
       || a.source.startLine - b.source.startLine
