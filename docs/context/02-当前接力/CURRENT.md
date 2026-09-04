@@ -79,7 +79,8 @@ p1_c_implementation_candidate = 73b2450
 - 不把“Git 仓库里存在的所有文件”自动等同于 RAG Corpus；准入规则必须可解释、可审计、可重复。
 - 不提前接 PostgreSQL、Embedding 或 LLM 来制造完整 RAG 观感。
 - 不把 `verify:p1c=PASS` 等价成 P1-C 已验收；当前 `P1_C_USER_REVIEW=PENDING`。
-- 后续所有实现遵守三层可读性规则：Commit 使用英文 subject + 中文 body/逐文件说明；新增或关键修改文件必须有文件级职责注释；关键 RAG/后端逻辑必须写解释“为什么”的代码注释，禁止用无意义逐行注释制造噪声。
+- 后续所有实现遵守三层可读性规则：Commit 使用英文 subject + 中文 body/逐文件说明；每个工程职责目录用 README 说明职责/内容/边界，代码文件保留清晰文件头，配置文件保持纯净不强塞注释；关键 RAG/后端逻辑必须写解释“为什么”的代码注释。
+- 所有修改完成并通过机械验证后必须先停在 working tree，向用户展示 `git status`、改动文件、逐文件说明、关键注释和必要 diff；未经用户明确确认禁止 `git commit`，提交完成后才能进入下一批。
 - 不跳过用户确认门自动推进 P1 子阶段。
 
 ## REQUIRED_CONTEXT
